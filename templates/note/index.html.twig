@@ -1,0 +1,182 @@
+{% extends '@DelPlopPbn/pbn.html.twig' %}
+{% trans_default_domain 'notes' %}
+
+{% block title %}{{ categoryName }}{% endblock %}
+
+{% block body %}
+    {% block pageTitle %}
+        <h1 class="w3-text-cyan">{{ categoryName }} ({{ notes|length }})</h1>
+    {% endblock %}
+
+    {% if type != 'public' and type != 'shared' and type != 'search' and type != 'important' and type != 'action-needed' %}
+        <div>
+            <a href="{{ path('note_new_from_cat', {category: categoryId}) }}" title="{{ ('notes.new_note'|trans) }}">{{ ('notes.new_note'|trans) }}</a>
+            {% if notes|length > 0 %}
+                <span class="order-notes">- <a href="{{ path('notes_sort', {category: categoryId}) }}" title="{{ ('notes.sort'|trans) }}">{{ ('notes.sort'|trans) }}</a></span>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <div class="flex-content">
+        {% for note in notes %}
+            <fieldset id="line_{{ note.id }}" class="{% if note.isImportant %}fieldset-important{% elseif note.needsAction %}fieldset-to-do{% endif %}">
+                <legend class="legend-fieldset" id="legend_{{ note.id }}">
+                    &nbsp;<a href="#" class="link-mask-fieldset" id="mask_{{ note.id }}">
+                        <img src="{{ asset(assetsRootPath ~ 'img/eye.svg') }}" alt="{{ ('general.show'|trans({}, 'messages')) }}" id="display_{{ note.id }}" style="display:none" width="18" />
+                        <img src="{{ asset(assetsRootPath ~ 'img/eye-slash.svg') }}" alt="{{ ('general.hide'|trans({}, 'messages')) }}" id="hide_{{ note.id }}" width="20" />
+                    </a>
+                    <span class="{% if note.user is same as(app.user) %}editable-note-title{% endif%}" id="title_{{ note.id }}">{{ note.title }}</span>
+                    {% if note.user is same as(app.user) %}
+                        <span class="note-categories">
+                            ({% for category in note.getNoteCategories() %}{% if not(loop.first) %}, {% endif %}<a href="{{ path('category_notes', { category: category.getCategory().id }) }}">{{ category.getCategory().name }}</a>{% endfor %})
+                        </span>
+                        <span class="link-fieldset" id="links_{{ note.id }}">
+                            &nbsp; <a class="link-edit" href="{{ path('note_edit', { id: note.id }) }}" title="{{ ('form.edit'|trans({}, 'messages')) }}">
+                                <img src="{{ asset(assetsRootPath ~ 'img/edit.svg') }}" width="17" alt="{{ ('form.edit'|trans({}, 'messages')) }}" />
+                            </a>
+                            &nbsp; <a class="link-delete" href="{{ path('note_delete', { id: note.id }) }}" title="{{ ('form.delete'|trans({}, 'messages')) }}" id="delete_link_{{ note.id }}" onclick="if(confirm('{{ ('notes.delete_confirm'|trans) }}')){deleteNote('{{ note.id }}');return false;}">
+                                <img src="{{ asset(assetsRootPath ~ 'img/trash.svg') }}" width="15" alt="{{ ('form.delete'|trans({}, 'messages')) }}" />
+                            </a>&nbsp;
+                        </span>
+                    {% endif %}
+                </legend>
+
+                <div class="content-fieldset" id="content_{{ note.id }}">
+                    <span class="{% if note.user is same as(app.user) %}editable-note-content{% endif%}" id="content_{{ note.id }}">{{ note.content|raw|nl2br }}</span>
+                </div>
+            </fieldset>
+        {% endfor %}
+    </div>
+
+    {% if type != 'public' and type != 'shared' and type != 'search' and type != 'important' and type != 'action-needed' and notes|length > 5 %}
+        <div>
+            <a href="{{ path('note_new_from_cat', {category: categoryId}) }}" title="{{ ('notes.new_note'|trans) }}">{{ ('notes.new_note'|trans) }}</a>
+            <span class="order-notes">- <a href="{{ path('notes_sort', {category: categoryId}) }}" title="{{ ('notes.sort'|trans) }}">{{ ('notes.sort'|trans) }}</a></span>
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        // fonctions utiles
+        var nl2br = function (str, is_xhtml) {
+            var breakTag = (is_xhtml || typeof is_xhtml === "undefined") ? "<br />" : "<br>";
+            return (str + "").replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, "$1"+ breakTag +"$2");
+        };
+        var show = function (elem, style) {
+            elem.style.display = style;
+        };
+        var hide = function (elem) {
+            elem.style.display = "none";
+        };
+        var toggle = function (elem, style) {
+            if (window.getComputedStyle(elem).display === style) {
+                hide(elem);
+                return;
+            }
+
+            show(elem, style);
+        };
+
+        // fonction générale
+        function clickToForm(elmt, part) {
+            var id_parts = elmt.getAttribute("id").split("_");
+            var id = id_parts[1];
+            var curVal = elmt.innerHTML;
+
+            // remplacer par un input ou un textarea (si ce n'est pas déjà le cas)
+            if (curVal != "" && curVal.substr(0, 6) != "<input" && curVal.substr(0, 9) != "<textarea") {
+                while (elmt.hasChildNodes()) {
+                    elmt.removeChild(elmt.lastChild);
+                }
+
+                if (part == "title") {
+                    var input = document.createElement("input");
+                    input.type = "text";
+                    input.name = "title_input_" +id;
+                    input.id = "title_input_" +id;
+                    input.value = curVal;
+                }
+                else if (part == "content") {
+                    // mise en forme valeur
+                    const search = "<br>";
+                    const replaceWith = "";
+                    curVal = curVal.split(search).join(replaceWith);
+
+                    var input = document.createElement("textarea");
+                    input.rows = 5;
+                    input.name = "content_input_" +id;
+                    input.id = "content_input_" +id;
+                    input.value = curVal;
+                    input.classList.add("big-input");
+                }
+                elmt.appendChild(input);
+
+                // sélecteur
+                var selector = "#" + part + "_input_" + id;
+                document.querySelector(selector).focus();
+
+                // sauvegarde
+                document.querySelector(selector).addEventListener("blur", (e) => {
+                    var newVal = document.querySelector(selector).value;
+
+                    // sauvegarder la nouvelle valeur
+                    if (newVal != "" && newVal != curVal) {
+                        const data = {catId: id, fieldValue: newVal, field: part};
+                        fetch("{{ path('note_edit_ajax', {id: 'idJs'}) }}".replace('idJs', id), {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(data),
+                        });
+                    }
+
+                    // remettre la valeur et le clic
+                    elmt.innerHTML = nl2br(newVal, true);
+                    elmt.addEventListener("click", (e) => {
+                        clickToForm(elmt, part);
+                    });
+                });
+            }
+        }
+
+        // éditer titre
+        document.querySelectorAll(".editable-note-title").forEach(function(elem) {
+            elem.addEventListener("click", (e) => {
+                clickToForm(elem, "title");
+            })
+        });
+
+        // éditer contenu
+        document.querySelectorAll(".editable-note-content").forEach(function(elem) {
+            elem.addEventListener("click", (e) => {
+                clickToForm(elem, "content");
+            });
+        });
+
+        // suppression
+        function deleteNote(noteId) {
+            const url = document.querySelector("#delete_link_" + noteId).getAttribute("href");
+            fetch(url, {
+                method: "GET",
+            })
+            .then(function() {
+                document.querySelector("#line_" + noteId).remove();
+            });
+        }
+
+        // masquage
+        document.querySelectorAll(".link-mask-fieldset").forEach(function(elem) {
+            elem.addEventListener("click", (e) => {
+                var id_parts = elem.getAttribute("id").split("_");
+                var id = id_parts[1];
+
+                toggle(document.querySelector("#content_" + id), "block");
+                toggle(document.querySelector("#hide_" + id), "inline");
+                toggle(document.querySelector("#display_" + id), "inline");
+            });
+        });
+    </script>
+{% endblock %}

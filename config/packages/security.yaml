@@ -1,0 +1,16 @@
+imports:
+    - { resource: '@DelPlopUserBundle/config/packages/security.yaml' }
+
+security:
+    access_control:
+        - { path: ^/notes/publiques$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/notes/(partagees|importantes|a-faire)$, roles: [IS_AUTHENTICATED_REMEMBERED, IS_AUTHENTICATED_FULLY, ROLE_USER] }
+        - { path: ^/categories, roles: [IS_AUTHENTICATED_REMEMBERED, IS_AUTHENTICATED_FULLY, ROLE_USER] }
+        - { path: ^/categorie/nouvelle$, roles: [IS_AUTHENTICATED_REMEMBERED, IS_AUTHENTICATED_FULLY, ROLE_USER] }
+        - { path: ^/categories/(ordonner|sauver-ordre)$, roles: [IS_AUTHENTICATED_REMEMBERED, IS_AUTHENTICATED_FULLY, ROLE_USER] }
+        - { path: ^/categorie/\d+/(modifier|supprimer|sauver|notes)$, roles: [IS_AUTHENTICATED_REMEMBERED, IS_AUTHENTICATED_FULLY, ROLE_USER] }
+        - { path: ^/note/nouvelle/\d+$, roles: [IS_AUTHENTICATED_REMEMBERED, IS_AUTHENTICATED_FULLY, ROLE_USER] }
+        - { path: ^/note/nouvelle$, roles: [IS_AUTHENTICATED_REMEMBERED, IS_AUTHENTICATED_FULLY, ROLE_USER] }
+        - { path: ^/notes/ordonner/\d+$, roles: [IS_AUTHENTICATED_REMEMBERED, IS_AUTHENTICATED_FULLY, ROLE_USER] }
+        - { path: ^/notes/(sauver-ordre|recherche)$, roles: [IS_AUTHENTICATED_REMEMBERED, IS_AUTHENTICATED_FULLY, ROLE_USER] }
+        - { path: ^/note/\d+/(modifier|supprimer|sauver)$, roles: [IS_AUTHENTICATED_REMEMBERED, IS_AUTHENTICATED_FULLY, ROLE_USER] }

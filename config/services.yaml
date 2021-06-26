@@ -1,0 +1,30 @@
+imports:
+    - { resource: '@DelPlopUserBundle/config/services.yaml' }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    DelPlop\PbnBundle\Controller\:
+        resource: '%kernel.project_dir%/vendor/delplop/pbnbundle/src/Controller/'
+        tags: [ 'controller.service_arguments' ]
+
+    DelPlop\PbnBundle\Repository\:
+        resource: '%kernel.project_dir%/vendor/delplop/pbnbundle/src/Repository/'
+        tags: [ 'doctrine.repository_service' ]
+
+    symfony.security:
+        alias: Symfony\Component\Security\Core\Security
+
+    delplop.pbn.form.type.note:
+        class: DelPlop\PbnBundle\Form\NoteFormType
+        arguments: ['@symfony.security']
+        tags:
+            - { name: form.type }
+
+    delplop_db.subscriber.table_prefix:
+        class: DelPlop\DbBundle\Subscriber\TablePrefixSubscriber
+        arguments:
+            $prefix: 'sfp_'
+        tags: [ 'doctrine.event_subscriber' ]

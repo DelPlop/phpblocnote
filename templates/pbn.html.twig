@@ -1,0 +1,105 @@
+{% trans_default_domain 'notes' %}
+{% set assetsRootPath = assetsRootPath ?? 'bundles/pbn/' %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}{{ ('general.home'|trans({}, 'messages')) }}{% endblock %}</title>
+        <link rel="shortcut icon" href="{{ asset(assetsRootPath ~ 'img/favicon.ico') }}" />
+        <link rel="stylesheet" href="{{ asset(assetsRootPath ~ 'css/pbn.css') }}" />
+        {% block stylesheets %}
+        {% endblock %}
+    </head>
+    <body>
+        <!-- Navbar -->
+        <div class="w3-top">
+            <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+                <a class="w3-bar-item w3-button w3-right w3-hide-large w3-large" href="javascript:void(0)" onclick="menu_open()"><img src="{{ asset(assetsRootPath ~ 'img/bars.svg') }}" alt="Menu" width="20" /></a>
+                <a class="w3-bar-item w3-button w3-hover-white w3-hide-small {% if activePage == 'home' or activePage == 'notes' %}w3-theme-l1{% endif %}" href="{{ path('index') }}">{{ ('general.home'|trans({}, 'messages')) }}</a>
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <a class="w3-bar-item w3-button w3-hover-white {% if activePage == 'notes-new' %}w3-theme-l1{% endif %}" href="{{ path('note_new') }}" title="{{ ('notes.new_note'|trans) }}">{{ ('notes.new'|trans) }}</a>
+                    <a class="w3-bar-item w3-button w3-hover-white w3-hide-small w3-hide-medium {% if activePage == 'notes-shared' %}w3-theme-l1{% endif %}" href="{{ path('notes_shared') }}" title="{{ ('notes.shared_notes'|trans) }}">{{ ('notes.shared'|trans) }}</a>
+                {% endif %}
+                <a class="w3-bar-item w3-button w3-hover-white w3-hide-medium {% if activePage == 'notes-pub' %}w3-theme-l1{% endif %}" href="{{ path('notes_public') }}" title="{{ ('notes.public_notes'|trans) }}">{{ ('notes.public'|trans) }}</a>
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <a class="w3-bar-item w3-button w3-hover-white {% if activePage == 'categories' %}w3-theme-l1{% endif %}" href="{{ path('categories') }}" title="{{ ('categories.manage'|trans) }}">{{ ('categories.all'|trans) }}</a>
+                    <a class="w3-bar-item w3-button w3-hover-white w3-hide-small w3-hide-medium {% if activePage == 'new-cat' %}w3-theme-l1{% endif %}" href="{{ path('category_new') }}" title="{{ ('categories.add_category'|trans) }}">{{ ('categories.add'|trans) }}</a>
+                    <a class="w3-bar-item w3-button w3-hover-white w3-hide-small {% if activePage == 'user' %}w3-theme-l1{% endif %}" href="{{ path('logout') }}" title="{{ ('user.logout'|trans({}, 'messages')) }}">{{ ('user.logout'|trans({}, 'messages')) }}</a>
+                    {{ render(controller(
+                        'DelPlop\\PbnBundle\\Controller\\NoteController::searchForm'
+                    )) }}
+                {% else %}
+                    <a class="w3-bar-item w3-button w3-hover-white {% if activePage == 'login' %}w3-theme-l1{% endif %}" href="{{ path('login') }}" title="{{ ('user.login'|trans({}, 'messages')) }}">{{ ('user.login'|trans({}, 'messages')) }}</a>
+                    <a class="w3-bar-item w3-button w3-hover-white w3-hide-small {% if activePage == 'register' %}w3-theme-l1{% endif %}" href="{{ path('register') }}" title="{{ ('user.register'|trans({}, 'messages')) }}">{{ ('user.register'|trans({}, 'messages')) }}</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+            <a href="javascript:void(0)" onclick="menu_close()" class="w3-right w3-xlarge w3-padding-large w3-hide-large" title="{{ ('menu.close_menu'|trans({}, 'messages')) }}">
+                <img src="{{ asset(assetsRootPath ~ 'img/close.svg') }}" alt="{{ ('menu.close'|trans({}, 'messages')) }}" width="20" />
+            </a>
+
+            {{ render(controller(
+                'DelPlop\\PbnBundle\\Controller\\CategoryController::menuList'
+            )) }}
+        </nav>
+
+        <!-- Overlay effect when opening sidebar on small screens -->
+        <div class="w3-overlay w3-hide-large" onclick="menu_close()" style="cursor:pointer" title="{{ ('menu.close_menu'|trans({}, 'messages')) }}" id="myOverlay"></div>
+
+        <!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+        <div class="w3-main w3-text-grey" style="margin-left:250px">
+
+            <div class="w3-row w3-padding-64">
+                <div class="w3-col w3-container">
+                    {% block body %}{% endblock %}
+                </div>
+            </div>
+
+            <footer id="myFooter">
+                <div class="w3-container w3-theme-l2 w3-padding-32">
+                    {% block footer %}
+                    {% endblock %}
+                </div>
+
+                <div class="w3-container w3-theme-l1">
+                    <p>
+                        {% block copyrights %}
+                            &copy; 2021
+                        {% endblock %}
+                    </p>
+                </div>
+            </footer>
+
+            <!-- END MAIN -->
+        </div>
+        <script>
+            // Get the Sidebar
+            var mySidebar = document.getElementById("mySidebar");
+
+            // Get the DIV with overlay effect
+            var overlayBg = document.getElementById("myOverlay");
+
+            // Toggle between showing and hiding the sidebar, and add overlay effect
+            function menu_open() {
+                if (mySidebar.style.display === 'block') {
+                    mySidebar.style.display = 'none';
+                    overlayBg.style.display = "none";
+                } else {
+                    mySidebar.style.display = 'block';
+                    overlayBg.style.display = "block";
+                }
+            }
+
+            // Close the sidebar with the close button
+            function menu_close() {
+                mySidebar.style.display = "none";
+                overlayBg.style.display = "none";
+            }
+        </script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

@@ -1,0 +1,148 @@
+{% extends '@DelPlopPbn/pbn.html.twig' %}
+{% trans_default_domain 'notes' %}
+
+{% block title %}{{ ('categories.all'|trans) }}{% endblock %}
+
+{% block body %}
+    {% block pageTitle %}
+        <h1 class="w3-text-cyan">{{ ('categories.title'|trans) }} ({{ categories|length }})</h1>
+    {% endblock %}
+
+    <p>
+        <a href="{{ path('category_new') }}" title="{{ ('categories.add_category'|trans) }}">{{ ('categories.add'|trans) }}</a> - <a href="{{ path('categories_sort') }}" title="{{ ('categories.sort'|trans) }}">{{ ('categories.sort'|trans) }}</a>
+    </p>
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <th>{{ ('categories.name'|trans) }}</th>
+            <th>{{ ('categories.notes'|trans) }}</th>
+            <th colspan="3">{{ ('categories.actions'|trans) }}</th>
+        </tr>
+
+        {% for category in categories %}
+            {% set tr_class = loop.index0 is odd ? 'odd' : 'even' %}
+            <tr id="line_{{ category.id }}" class="{{ tr_class }}">
+                <td>
+                    <span class="{% if category.user is same as(app.user) %}editable-cat-title{% endif%}" id="title_{{ category.id }}">{{ category.name }}</span>
+                </td>
+                <td>
+                    <a href="{{ path('category_notes', {category: category.id}) }}" title="{{ ('categories.see_notes'|trans) }}">
+                        <img src="{{ asset(assetsRootPath ~ 'img/eye.svg') }}" alt="" width="20" /> {{ ('categories.see'|trans) }}
+                    </a>
+                </td>
+                <td width="5%">
+                    <a href="{{ path('notes_sort', {category: category.id}) }}" title="{{ ('notes.sort'|trans) }}">
+                        <img src="{{ asset(assetsRootPath ~ 'img/sort.svg') }}" alt="{{ ('form.sort'|trans({}, 'messages')) }}" width="20" />
+                    </a>
+                </td>
+                <td width="5%">
+                    <a href="{{ path('category_edit', { id: category.id }) }}" title="{{ ('form.edit'|trans({}, 'messages')) }}">
+                        <img src="{{ asset(assetsRootPath ~ 'img/edit.svg') }}" alt="{{ ('form.edit'|trans({}, 'messages')) }}" width="19" />
+                    </a>
+                </td>
+                <td width="5%">
+                    <a id="delete_link_{{ category.id }}" href="{{ path('category_delete', { id: category.id }) }}" title="{{ ('form.delete'|trans({}, 'messages')) }}" onclick="if(confirm('{{ ('categories.delete_confirm'|trans) }}')){deleteCategory('{{ category.id }}');return false;}">
+                        <img src="{{ asset(assetsRootPath ~ 'img/trash.svg') }}" width="18" alt="{{ ('form.delete'|trans({}, 'messages')) }}" />
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    {% if categories|length > 15 %}
+        <p>
+            <a href="{{ path('category_new') }}" title="{{ ('categories.add_category'|trans) }}">{{ ('categories.add'|trans) }}</a> - <a href="{{ path('categories_sort') }}" title="{{ ('categories.sort'|trans) }}">{{ ('categories.sort'|trans) }}</a>
+        </p>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        // fonctions utiles
+        var nl2br = function (str, is_xhtml) {
+            var breakTag = (is_xhtml || typeof is_xhtml === "undefined") ? "<br />" : "<br>";
+            return (str + "").replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, "$1"+ breakTag +"$2");
+        };
+
+        // fonction générale
+        function clickToForm(elmt, part) {
+            var id_parts = elmt.getAttribute("id").split("_");
+            var id = id_parts[1];
+            var curVal = elmt.innerHTML;
+
+            // remplacer par un input ou un textarea (si ce n'est pas déjà le cas)
+            if (curVal != "" && curVal.substr(0, 6) != "<input" && curVal.substr(0, 9) != "<textarea") {
+                while (elmt.hasChildNodes()) {
+                    elmt.removeChild(elmt.lastChild);
+                }
+
+                if (part == "title") {
+                    var input = document.createElement("input");
+                    input.type = "text";
+                    input.name = "title_input_" +id;
+                    input.id = "title_input_" +id;
+                    input.value = curVal;
+                }
+                else if (part == "content") {
+                    // mise en forme valeur
+                    const search = "<br>";
+                    const replaceWith = "";
+                    curVal = curVal.split(search).join(replaceWith);
+
+                    var input = document.createElement("textarea");
+                    input.rows = 5;
+                    input.name = "content_input_" +id;
+                    input.id = "content_input_" +id;
+                    input.value = curVal;
+                    input.classList.add("big-input");
+                }
+                elmt.appendChild(input);
+
+                // sélecteur
+                var selector = "#" + part + "_input_" + id;
+                document.querySelector(selector).focus();
+
+                // sauvegarde
+                document.querySelector(selector).addEventListener("blur", (e) => {
+                    var newVal = document.querySelector(selector).value;
+
+                    // sauvegarder la nouvelle valeur
+                    if (newVal != "" && newVal != curVal) {
+                        const data = {catId: id, fieldValue: newVal, field: part};
+                        fetch("{{ path('category_edit_ajax', {id: 'idJs'}) }}".replace('idJs', id), {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify(data),
+                        });
+                    }
+
+                    // remettre la valeur et le clic
+                    elmt.innerHTML = nl2br(newVal, true);
+                    elmt.addEventListener("click", (e) => {
+                        clickToForm(elmt, part);
+                    });
+                });
+            }
+        }
+
+        // éditer titre
+        document.querySelectorAll(".editable-cat-title").forEach(function(elem) {
+            elem.addEventListener("click", (e) => {
+                clickToForm(elem, "title");
+            })
+        });
+
+        // suppression
+        function deleteCategory(catId) {
+            const url = document.querySelector("#delete_link_" + catId).getAttribute("href");
+            fetch(url, {
+                method: "GET",
+            })
+            .then(function() {
+                document.querySelector("#line_" + catId).remove();
+            });
+        }
+    </script>
+{% endblock %}

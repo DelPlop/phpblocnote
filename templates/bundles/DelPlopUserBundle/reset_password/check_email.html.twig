@@ -1,0 +1,15 @@
+{% extends '@DelPlopPbn/pbn.html.twig' %}
+
+{% block title %}{{ ('password_reset.confirm_title'|trans) }}{% endblock %}
+
+{% block body %}
+    {% block pageTitle %}
+        <h1 class="w3-text-cyan">{{ ('password_reset.confirm_title'|trans) }}</h1>
+    {% endblock %}
+
+    <p>
+        {{ ('password_reset.confirm_text'|trans|raw) }} {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+        <br /><br />
+        {{ ('password_reset.try_again'|trans) }}
+    </p>
+{% endblock %}

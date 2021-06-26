@@ -1,0 +1,36 @@
+{
+    "name": "delplop/pbnbundle",
+    "description": "bundle de prise de notes",
+    "version": "2021",
+    "type": "symfony-bundle",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Del Plop",
+            "email": "plop@phpblocnote.net",
+            "homepage": "https://www.phpblocnote.net",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "delplop/dbbundle": "dev-master",
+        "delplop/userbundle": "dev-master"
+    },
+    "repositories": {
+        "db-bundle": {
+            "type": "vcs",
+            "url": "https://github.com/DelPlop/sf-db-prefix-bundle.git"
+        },
+        "user-bundle": {
+            "type": "vcs",
+            "url": "https://github.com/DelPlop/sf-user-bundle.git"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "DelPlop\\PbnBundle\\": "src/",
+            "DelPlopUserBundle\\": "../userbundle/src/"
+        }
+    }
+}

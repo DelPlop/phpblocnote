@@ -1,0 +1,25 @@
+<link rel="stylesheet" href="{{ siteUrl }}/bundles/pbn/css/pbn.css" />
+
+<div class="w3-main w3-text-grey">
+    <div class="w3-row w3-padding-64 w3-padding-top-0">
+        <div class="w3-col w3-container">
+            <h1 class="w3-text-cyan">{{ ('general.welcome'|trans) }}</h1>
+
+            <div class="w3-container w3-padding-24 w3-white w3-left-align">
+                <p>{{ ('registration.mail_text'|trans({'%login%': login}))|raw }}</p>
+
+                <p>{{ ('password_reset.signature'|trans({'%site_url%': siteUrl, '%site_name%': siteName}))|raw }}</p>
+            </div>
+        </div>
+    </div>
+
+    <footer id="myFooter">
+        <div class="w3-container w3-theme-l1">
+            <p>
+                {% block copyrights %}
+                    &copy; 2021 <a href="{{ siteUrl }}">{{ siteName }}</a>
+                {% endblock %}
+            </p>
+        </div>
+    </footer>
+</div>

@@ -1,0 +1,106 @@
+{% extends '@DelPlopPbn/pbn.html.twig' %}
+{% trans_default_domain 'notes' %}
+
+{% block title %}{{ ('notes.sort'|trans) }}{% endblock %}
+
+{% block body %}
+    {% block pageTitle %}
+        <h1 class="w3-text-cyan">{{ ('notes.sort'|trans) }}</h1>
+    {% endblock %}
+
+    <p>
+        <a href="{{ path('category_notes', { category: category.id }) }}" title="{{ ('general.back'|trans({}, 'messages')) }}">{{ ('general.back'|trans({}, 'messages')) }}</a>
+    </p>
+
+    <ul id="sort-note-list">
+        {% for note in notes %}
+            <li class="item-note-list" draggable="true" id="item-{{ note.id }}">{{ note.title }}</li>
+        {% endfor %}
+    </ul>
+
+    {% if notes|length > 15 %}
+        <p>
+            <a href="{{ path('category_notes', { category: category.id }) }}" title="{{ ('general.back'|trans({}, 'messages')) }}">{{ ('general.back'|trans({}, 'messages')) }}</a>
+        </p>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset(assetsRootPath ~ 'js/DragDropTouch.js') }}"></script>
+    <script>
+        function slist (target) {
+            target = document.getElementById(target);
+
+            var items = target.getElementsByTagName("li"), current = null;
+            for (let i of items) {
+                i.addEventListener("dragstart", function (ev) {
+                    current = this;
+                    for (let it of items) {
+                        if (it != current) { it.classList.add("hint"); }
+                    }
+                });
+
+                i.addEventListener("dragenter", function (ev) {
+                    if (this != current) { this.classList.add("active"); }
+                });
+
+                i.addEventListener("dragleave", function () {
+                    this.classList.remove("active");
+                });
+
+                i.addEventListener("dragend", function () {
+                    for (let it of items) {
+                        it.classList.remove("hint");
+                        it.classList.remove("active");
+                    }
+                });
+
+                i.addEventListener("dragover", function (evt) {
+                    evt.preventDefault();
+                });
+
+                // ON DROP : NOUVEL ORDRE + SAUVEGARDE
+                i.addEventListener("drop", function (evt) {
+                    evt.preventDefault();
+                    let itemsOrder = [];
+
+                    if (this != current) {
+                        let currentpos = 0, droppedpos = 0;
+
+                        // réordonner les éléments
+                        for (let it = 0; it < items.length; it ++) {
+                            if (current == items[it]) { currentpos = it; }
+                            if (this == items[it]) { droppedpos = it; }
+                        }
+
+                        if (currentpos < droppedpos) {
+                            this.parentNode.insertBefore(current, this.nextSibling);
+                        } else {
+                            this.parentNode.insertBefore(current, this);
+                        }
+
+                        // nouvel ordre à sauvegarder
+                        var newItems = target.getElementsByTagName("li");
+                        for (let it = 0; it < newItems.length; it ++) {
+                            let id_parts = newItems[it].getAttribute("id").split("-");
+                            itemsOrder[it] = id_parts[1];
+                        }
+                    }
+
+                    const data = {catId: '{{ category.id }}', order: itemsOrder};
+                    fetch("{{ path('notes_sort_save') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(data),
+                    });
+                });
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", function() {
+            slist("sort-note-list");
+        });
+    </script>
+{% endblock %}

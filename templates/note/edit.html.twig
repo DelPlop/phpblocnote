@@ -1,0 +1,86 @@
+{% extends '@DelPlopPbn/pbn.html.twig' %}
+{% trans_default_domain 'notes' %}
+
+{% block title %}
+    {% if type =='add' %}{{ ('form.add'|trans({}, 'messages')) }}{% else %}{{ ('form.edit'|trans({}, 'messages')) }}{% endif%} {{ ('notes.a_note'|trans) }}
+{% endblock %}
+
+{% block body %}
+    {% block pageTitle %}
+        <h1 class="w3-text-cyan">
+            {% if type =='add' %}{{ ('form.add'|trans({}, 'messages')) }}{% else %}{{ ('form.edit'|trans({}, 'messages')) }}{% endif%} {{ ('notes.a_note'|trans) }}
+        </h1>
+    {% endblock %}
+
+    {{ form(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        // sauvegarde des catégories à la volée
+        document.querySelectorAll("#note_form_categories > label").forEach(function(elem) {
+            elem.addEventListener("click", (e) => {
+                var id_parts = elem.getAttribute("for").split("_");
+                var id = id_parts[3];
+                var action = "add";
+
+                // la case est-elle ACTUELLEMENT cochée ?
+                const chbxSelector = "#note_form_categories_" + id;
+                if (document.querySelector(chbxSelector).checked) {
+                    // si oui, le clic va la décocher donc on supprime le lien
+                    action = "delete";
+                }
+
+                const data = {field: 'category', fieldValue: id, action: action};
+                fetch("{{ path('note_edit_ajax', {id: noteId}) }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                });
+            });
+        });
+
+        // sauvegarde des catégories spéciales à la volée
+        document.querySelectorAll("#note_form_isImportant, #note_form_needsAction").forEach(function(elem) {
+            elem.addEventListener("click", (e) => {
+                var value = false;
+                var field = 'important';
+
+                // la case est-elle ACTUELLEMENT cochée ?
+                if (elem.checked) {
+                    value = true;
+                }
+
+                if (elem.getAttribute("id") == 'note_form_needsAction') {
+                    field = 'todo';
+                }
+
+                const data = {field: field, fieldValue: value};
+                fetch("{{ path('note_edit_ajax', {id: noteId}) }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                });
+            });
+        });
+
+        // sauvegarde de la visibilité à la volée
+        document.querySelector("#note_form_visibility").addEventListener("change", (e) => {
+            var value = document.querySelector("#note_form_visibility").value;
+
+            // sauvegarde
+            const data = {fieldValue: value, field: "visibility"};
+            fetch("{{ path('note_edit_ajax', {id: noteId}) }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+        });
+    </script>
+{% endblock %}

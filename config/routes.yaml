@@ -1,0 +1,102 @@
+user_bundle_routes:
+    resource: '@DelPlopUserBundle/config/routes.yaml'
+
+categories:
+    path: /categories
+    controller: DelPlop\PbnBundle\Controller\CategoryController::index
+    methods: [GET]
+
+categories_sort:
+    path: /categories/ordonner
+    controller: DelPlop\PbnBundle\Controller\CategoryController::sort
+    methods: [GET]
+
+categories_sort_save:
+    path: /categories/sauver-ordre
+    controller: DelPlop\PbnBundle\Controller\CategoryController::saveSort
+    methods: [POST]
+
+category_new:
+    path: /categorie/nouvelle
+    controller: DelPlop\PbnBundle\Controller\CategoryController::edit
+    methods: [GET, POST]
+
+category_edit:
+    path: /categorie/{id}/modifier
+    controller: DelPlop\PbnBundle\Controller\CategoryController::edit
+    methods: [GET, POST]
+
+category_edit_ajax:
+    path: /categorie/{id}/sauver
+    controller: DelPlop\PbnBundle\Controller\CategoryController::save
+    methods: [POST]
+
+category_delete:
+    path: /categorie/{id}/supprimer
+    controller: DelPlop\PbnBundle\Controller\CategoryController::delete
+    methods: [GET]
+
+category_notes:
+    path: /categorie/{category}/notes
+    controller: DelPlop\PbnBundle\Controller\NoteController::index
+    methods: [GET]
+
+note_new:
+    path: /note/nouvelle
+    controller: DelPlop\PbnBundle\Controller\NoteController::edit
+    methods: [GET, POST]
+
+note_new_from_cat:
+    path: /note/nouvelle/{category}
+    controller: DelPlop\PbnBundle\Controller\NoteController::edit
+    methods: [GET, POST]
+
+note_edit:
+    path: /note/{id}/modifier
+    controller: DelPlop\PbnBundle\Controller\NoteController::edit
+    methods: [GET, POST]
+
+note_edit_ajax:
+    path: /note/{id}/sauver
+    controller: DelPlop\PbnBundle\Controller\NoteController::save
+    methods: [POST]
+
+note_delete:
+    path: /note/{id}/supprimer
+    controller: DelPlop\PbnBundle\Controller\NoteController::delete
+    methods: [GET]
+
+notes_shared:
+    path: /notes/partagees
+    controller: DelPlop\PbnBundle\Controller\NoteController::sharedNotes
+    methods: [GET]
+
+notes_public:
+    path: /notes/publiques
+    controller: DelPlop\PbnBundle\Controller\NoteController::publicNotes
+    methods: [GET]
+
+notes_important:
+    path: /notes/importantes
+    controller: DelPlop\PbnBundle\Controller\NoteController::importantNotes
+    methods: [GET]
+
+notes_action_needed:
+    path: /notes/a-faire
+    controller: DelPlop\PbnBundle\Controller\NoteController::actionNeededNotes
+    methods: [GET]
+
+notes_sort:
+    path: /notes/ordonner/{category}
+    controller: DelPlop\PbnBundle\Controller\NoteController::sort
+    methods: [GET]
+
+notes_sort_save:
+    path: /notes/sauver-ordre
+    controller: DelPlop\PbnBundle\Controller\NoteController::saveSort
+    methods: [POST]
+
+notes_search:
+    path: /notes/recherche
+    controller: DelPlop\PbnBundle\Controller\NoteController::search
+    methods: [GET, POST]
