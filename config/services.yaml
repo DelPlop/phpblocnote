@@ -1,0 +1,31 @@
+parameters:
+    router.request_context.scheme: 'https'
+    asset.request_context.secure: true
+
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: [ 'controller.service_arguments' ]
+
+    App\DataFixtures\UserFixtures:
+        tags:
+          [ 'doctrine.fixture.orm' ]
+
+    project.subscriber.table_prefix:
+        class: App\Subscriber\TablePrefixSubscriber
+        arguments:
+            $prefix: 'sfp_'
+        tags:
+            - { name: doctrine.event_subscriber }

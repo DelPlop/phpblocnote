@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if type =='add' %}{{ ('form.add'|trans) }}{% else %}{{ ('form.edit'|trans) }}{% endif%} {{ ('categories.a_cat'|trans) }}
+{% endblock %}
+
+{% block body %}
+    <h1 class="w3-text-cyan">
+        {% if type =='add' %}{{ ('form.add'|trans) }}{% else %}{{ ('form.edit'|trans) }}{% endif%} {{ ('categories.a_cat'|trans) }}
+    </h1>
+
+    {{ form(form) }}
+{% endblock %}

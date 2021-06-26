@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ ('categories.all'|trans) }}{% endblock %}
+
+{% block body %}
+    <h1 class="w3-text-cyan">{{ ('categories.title'|trans) }} ({{ categories|length }})</h1>
+
+    <p>
+        <a href="{{ path('category_new') }}" title="{{ ('categories.add_category'|trans) }}">{{ ('categories.add'|trans) }}</a>&nbsp;
+        - <a href="{{ path('categories_sort') }}" title="{{ ('categories.sort'|trans) }}">{{ ('categories.sort'|trans) }}</a>
+    </p>
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <th>{{ ('categories.name'|trans) }}</th>
+            <th>{{ ('categories.notes'|trans) }}</th>
+            <th colspan="3">{{ ('categories.actions'|trans) }}</th>
+        </tr>
+
+        {% for category in categories %}
+            {% set tr_class = loop.index0 is odd ? 'odd' : 'even' %}
+            <tr id="line_{{ category.id }}" class="{{ tr_class }}">
+                <td>
+                    <span class="editable-cat-title" id="title_{{ category.id }}">{{ category.name }}</span>
+                </td>
+                <td>
+                    <a href="{{ path('category_notes', {category: category.id}) }}" title="{{ ('categories.see_notes'|trans) }}">
+                        <img src="/img/eye.svg" alt="{{ ('categories.see'|trans) }}" width="20" /> {{ ('categories.see'|trans) }}
+                    </a>
+                </td>
+                <td width="5%">
+                    <a href="{{ path('notes_sort', {category: category.id}) }}" title="{{ ('notes.sort'|trans) }}">
+                        <img src="/img/sort.svg" alt="{{ ('form.sort'|trans) }}" width="20" />
+                    </a>
+                </td>
+                <td width="5%">
+                    <a href="{{ path('category_edit', { id: category.id }) }}" title="{{ ('form.edit'|trans) }}">
+                        <img src="/img/edit.svg" alt="{{ ('form.edit'|trans) }}" width="19" />
+                    </a>
+                </td>
+                <td width="5%">
+                    <a id="delete_link_{{ category.id }}" href="{{ path('category_delete', { id: category.id }) }}" title="{{ ('form.delete'|trans) }}" onclick="if(confirm('{{ ('categories.delete_confirm'|trans) }}')){deleteCategory('{{ category.id }}');return false;}">
+                        <img src="/img/trash.svg" width="18" alt="{{ ('form.delete'|trans) }}" />
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    {% if categories|length > 15 %}
+        <p>
+            <a href="{{ path('category_new') }}" title="{{ ('categories.add_category'|trans) }}">{{ ('categories.add'|trans) }}</a>&nbsp;
+            - <a href="{{ path('categories_sort') }}" title="{{ ('categories.sort'|trans) }}">{{ ('categories.sort'|trans) }}</a>
+        </p>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        // suppression
+        function deleteCategory(catId) {
+            const url = document.querySelector("#delete_link_" + catId).getAttribute("href");
+            fetch(url, {
+                method: "GET",
+            })
+            .then(function() {
+                document.querySelector("#line_" + catId).remove();
+            });
+        }
+    </script>
+{% endblock %}

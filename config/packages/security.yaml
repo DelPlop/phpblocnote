@@ -1,0 +1,36 @@
+security:
+    password_hashers:
+        App\Entity\RegisteredUser:
+            algorithm: auto
+
+    enable_authenticator_manager: true
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\RegisteredUser
+                property: login
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            lazy: true
+            provider: app_user_provider
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            logout:
+                path: logout
+            login_throttling:
+                max_attempts: 3
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 2592000 # 1 month in seconds
+                path: /
+
+    access_control:
+        - { path: ^/$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/connexion$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/inscription$, roles: IS_AUTHENTICATED_ANONYMOUSLY }

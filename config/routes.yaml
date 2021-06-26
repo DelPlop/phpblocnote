@@ -1,0 +1,83 @@
+index:
+    path: /
+    controller: App\Controller\IndexController::index
+    methods: GET
+
+login:
+    path: /connexion
+    controller: App\Controller\SecurityController::login
+    methods: [GET, POST]
+
+logout:
+    path: /deconnexion
+    controller: App\Controller\SecurityController::logout
+    methods: GET
+
+register:
+    path: /inscription
+    controller: App\Controller\RegistrationController::register
+    methods: [GET, POST]
+
+categories:
+    path: /categories
+    controller: App\Controller\CategoryController::index
+
+categories_sort:
+    path: /categories/ordonner
+    controller: App\Controller\CategoryController::sort
+
+categories_sort_save:
+    path: /categories/sauver-ordre
+    controller: App\Controller\CategoryController::saveSort
+
+category_new:
+    path: /categorie/nouvelle
+    controller: App\Controller\CategoryController::edit
+
+category_edit:
+    path: /categorie/{id}/modifier
+    controller: App\Controller\CategoryController::edit
+
+category_delete:
+    path: /categorie/{id}/supprimer
+    controller: App\Controller\CategoryController::delete
+
+category_notes:
+    path: /categorie/{category}/notes
+    controller: App\Controller\NoteController::index
+
+note_new:
+    path: /note/nouvelle
+    controller: App\Controller\NoteController::edit
+
+note_new_from_cat:
+    path: /note/nouvelle/{category}
+    controller: App\Controller\NoteController::edit
+
+note_edit:
+    path: /note/{id}/modifier
+    controller: App\Controller\NoteController::edit
+
+note_delete:
+    path: /note/{id}/supprimer
+    controller: App\Controller\NoteController::delete
+
+notes_shared:
+    path: /notes/partagees
+    controller: App\Controller\NoteController::sharedNotes
+
+notes_public:
+    path: /notes/publiques
+    controller: App\Controller\NoteController::publicNotes
+
+notes_sort:
+    path: /notes/ordonner/{category}
+    controller: App\Controller\NoteController::sort
+
+notes_sort_save:
+    path: /notes/sauver-ordre
+    controller: App\Controller\NoteController::saveSort
+
+notes_search:
+    path: /notes/recherche
+    controller: App\Controller\NoteController::search

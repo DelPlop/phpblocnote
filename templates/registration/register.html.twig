@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ ('user.register'|trans) }}{% endblock %}
+
+{% block body %}
+    <h1>{{ ('user.register'|trans) }}</h1>
+
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+
+    {{ form_start(registrationForm, {
+        attr: {class: ''}
+    }) }}
+    {{ form_row(registrationForm.login, {
+        label: ('form.login.login'|trans),
+        row_attr: {class: ''},
+        attr: {class: ''}
+    }) }}
+    {{ form_row(registrationForm.plainPassword, {
+        label: ('form.login.password'|trans),
+        row_attr: {class: ''},
+        attr: {class: ''}
+    }) }}
+    {{ form_row(registrationForm.email, {
+        label: ('form.login.email'|trans),
+        row_attr: {class: ''},
+        attr: {class: ''}
+    }) }}
+
+    <button type="submit">
+        {{ ('user.register'|trans) }}
+    </button>
+    {{ form_end(registrationForm) }}
+{% endblock %}

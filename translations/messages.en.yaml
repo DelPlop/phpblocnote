@@ -1,0 +1,79 @@
+general:
+    welcome: Welcome to
+    home: Home
+    by: by
+    back: Back
+    yes: yes
+    no: no
+    show: Display
+    hide: Hide
+
+form:
+    add: Add
+    edit: Edit
+    delete: Delete
+    sort: Sort
+    login:
+        login: Login
+        email: E-mail
+        password: Password
+        password_confirm: Confirmation
+        remember: Remerber me
+
+menu:
+    close: Close
+    close_menu: Close menu
+
+user:
+    login: Log in
+    logout: Log out
+    logged_as: You are logged in as
+    register: Register
+
+OK: OK
+
+categories:
+    all: Categories
+    title: My categories
+    manage: Manage categories
+    add: New category
+    add_category: Add a category
+    num: Id
+    name: Name
+    actions: Actions
+    sort: Sort categories
+    a_cat: a category
+    category: Category
+    category_required: Category *
+    delete_confirm: Are you sure you want to delete this category?
+    notes: Notes
+    see_notes: See notes
+    see: See
+
+notes:
+    new: New
+    title_page: '%state% notes'
+    new_note: New note
+    importants: Important
+    important_lower: important
+    important_notes: Important notes
+    public: Public
+    public_lower: public
+    public_notes: Public notes
+    shared: Shared
+    shared_lower: shared
+    shared_notes: Shared notes
+    delete_confirm: Are you sure you want to delete this note?
+    a_note: a note
+    title: Title
+    title_required: Title *
+    desc: Content
+    visible_by: Visible by
+    visible_by_required: Visible by *
+    sort: Sort notes
+    search: Search
+    search_placeholder: Search...
+    visibility:
+        private: Only me
+        shared: Any logged member
+        public: Everyone
