@@ -1,0 +1,11 @@
+firewalls:
+    access_control:
+        - { path: ^/notes/publiques$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/notes/partagees, roles: ROLE_USER }
+        - { path: ^/categories, roles: ROLE_USER }
+        - { path: ^/categorie/nouvelle$, roles: ROLE_USER }
+        - { path: ^/categories/(ordonner|sauver-ordre)$, roles: ROLE_USER }
+        - { path: ^/categorie/\d+/(modifier|supprimer|notes)$, roles: ROLE_USER }
+        - { path: ^/note/nouvelle$, roles: ROLE_USER }
+        - { path: ^/notes/(ordonner|sauver-ordre|recherche)$, roles: ROLE_USER }
+        - { path: ^/note/\d+/(modifier|supprimer)$, roles: ROLE_USER }

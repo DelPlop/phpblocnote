@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Controller;
+namespace DelPlop\PbnBundle\Controller;
 
-use App\Entity\Category;
-use App\Form\CategoryFormType;
+use DelPlop\PbnBundle\Entity\Category;
+use DelPlop\PbnBundle\Form\CategoryFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Repository\CategoryRepository;
+use DelPlop\PbnBundle\Repository\CategoryRepository;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -50,7 +50,7 @@ class CategoryController extends AbstractController
     // liste des catégories
     public function index(): Response
     {
-        return new Response($this->twig->render('category/index.html.twig', [
+        return new Response($this->twig->render('@DelPlopPbn/category/index.html.twig', [
             'categories' => $this->categoryRepository->findBy(['user' => $this->security->getUser()], ['position' => 'asc']),
             'activePage' => 'categories'
         ]));
@@ -59,7 +59,7 @@ class CategoryController extends AbstractController
     // liste des catégories (menu de gauche)
     public function menuList(): Response
     {
-        return new Response($this->twig->render('category/menu-list.html.twig', [
+        return new Response($this->twig->render('@DelPlopPbn/category/menu-list.html.twig', [
             'categories' => $this->categoryRepository->findBy(['user' => $this->security->getUser()], ['position' => 'asc'])
         ]));
     }
@@ -67,7 +67,7 @@ class CategoryController extends AbstractController
     // ordonner les catégories
     public function sort(): Response
     {
-        return new Response($this->twig->render('category/sort.html.twig', [
+        return new Response($this->twig->render('@DelPlopPbn/category/sort.html.twig', [
             'categories' => $this->categoryRepository->findBy(['user' => $this->security->getUser()], ['position' => 'asc']),
             'activePage' => 'categories'
         ]));
@@ -101,12 +101,12 @@ class CategoryController extends AbstractController
     // ajouter ou modifier une catégorie
     public function edit(Request $request, ?Category $category): Response
     {
-        $label = $this->translator->trans('form.edit');
+        $label = $this->translator->trans('form.edit', [], 'messages');
         $type = 'edit';
         $page = 'categories';
 
         if (empty($category)) {
-            $label = $this->translator->trans('form.add');
+            $label = $this->translator->trans('form.add', [], 'messages');
             $type = 'add';
             $page = 'new-cat';
 
@@ -140,7 +140,7 @@ class CategoryController extends AbstractController
             return $this->redirectToRoute('categories');
         }
 
-        return new Response($this->twig->render('category/edit.html.twig', [
+        return new Response($this->twig->render('@DelPlopPbn/category/edit.html.twig', [
             'form' => $form->createView(),
             'activePage' => $page,
             'type' => $type

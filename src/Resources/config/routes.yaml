@@ -1,0 +1,63 @@
+categories:
+    path: /categories
+    controller: DelPlop\PbnBundle\Controller\CategoryController::index
+
+categories_sort:
+    path: /categories/ordonner
+    controller: DelPlop\PbnBundle\Controller\CategoryController::sort
+
+categories_sort_save:
+    path: /categories/sauver-ordre
+    controller: DelPlop\PbnBundle\Controller\CategoryController::saveSort
+
+category_new:
+    path: /categorie/nouvelle
+    controller: DelPlop\PbnBundle\Controller\CategoryController::edit
+
+category_edit:
+    path: /categorie/{id}/modifier
+    controller: DelPlop\PbnBundle\Controller\CategoryController::edit
+
+category_delete:
+    path: /categorie/{id}/supprimer
+    controller: DelPlop\PbnBundle\Controller\CategoryController::delete
+
+category_notes:
+    path: /categorie/{category}/notes
+    controller: DelPlop\PbnBundle\Controller\NoteController::index
+
+note_new:
+    path: /note/nouvelle
+    controller: DelPlop\PbnBundle\Controller\NoteController::edit
+
+note_new_from_cat:
+    path: /note/nouvelle/{category}
+    controller: DelPlop\PbnBundle\Controller\NoteController::edit
+
+note_edit:
+    path: /note/{id}/modifier
+    controller: DelPlop\PbnBundle\Controller\NoteController::edit
+
+note_delete:
+    path: /note/{id}/supprimer
+    controller: DelPlop\PbnBundle\Controller\NoteController::delete
+
+notes_shared:
+    path: /notes/partagees
+    controller: DelPlop\PbnBundle\Controller\NoteController::sharedNotes
+
+notes_public:
+    path: /notes/publiques
+    controller: DelPlop\PbnBundle\Controller\NoteController::publicNotes
+
+notes_sort:
+    path: /notes/ordonner/{category}
+    controller: DelPlop\PbnBundle\Controller\NoteController::sort
+
+notes_sort_save:
+    path: /notes/sauver-ordre
+    controller: DelPlop\PbnBundle\Controller\NoteController::saveSort
+
+notes_search:
+    path: /notes/recherche
+    controller: DelPlop\PbnBundle\Controller\NoteController::search

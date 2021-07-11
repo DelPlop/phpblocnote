@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Form;
+namespace DelPlop\PbnBundle\Form;
 
-use App\Entity\Category;
-use App\Entity\Note;
+use DelPlop\PbnBundle\Entity\Category;
+use DelPlop\PbnBundle\Entity\Note;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -24,7 +24,6 @@ class NoteFormType extends AbstractType
      * @var Security
      */
     private $security;
-
 
     public function __construct(Security $security)
     {
@@ -111,7 +110,8 @@ class NoteFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Note::class,
             'submitLabel' => 'string',
-            'category' => Category::class
+            'category' => Category::class,
+            'translation_domain' => 'notes'
         ]);
     }
 }

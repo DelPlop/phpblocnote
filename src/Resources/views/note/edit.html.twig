@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain 'notes' %}
+
+{% block title %}
+    {% if type =='add' %}{{ ('form.add'|trans({}, 'messages')) }}{% else %}{{ ('form.edit'|trans({}, 'messages')) }}{% endif%} {{ ('notes.a_note'|trans) }}
+{% endblock %}
+
+{% block body %}
+    <h1 class="w3-text-cyan">
+        {% if type =='add' %}{{ ('form.add'|trans({}, 'messages')) }}{% else %}{{ ('form.edit'|trans({}, 'messages')) }}{% endif%} {{ ('notes.a_note'|trans) }}
+    </h1>
+
+    {{ form(form) }}
+{% endblock %}

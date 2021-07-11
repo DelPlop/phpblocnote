@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repository;
+namespace DelPlop\PbnBundle\Repository;
 
-use App\Entity\Category;
-use App\Entity\Note;
-use App\Entity\RegisteredUser;
+use DelPlop\PbnBundle\Entity\Category;
+use DelPlop\PbnBundle\Entity\Note;
+use App\Entity\ApplicationUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,7 +22,7 @@ class NoteRepository extends ServiceEntityRepository
         parent::__construct($registry, Note::class);
     }
 
-    public function searchNotes(RegisteredUser $user, string $searchTerm): ArrayCollection
+    public function searchNotes(ApplicationUser $user, string $searchTerm): ArrayCollection
     {
         $terms = explode(' ', $searchTerm);
         $qb = $this
@@ -40,7 +40,7 @@ class NoteRepository extends ServiceEntityRepository
         return new ArrayCollection($qb->getQuery()->getResult());
     }
 
-    public function getNotesByCategoryAndUser(Category $category, RegisteredUser $user): array
+    public function getNotesByCategoryAndUser(Category $category, ApplicationUser $user): array
     {
         $qb = $this
             ->createQueryBuilder('n')

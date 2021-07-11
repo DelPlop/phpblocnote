@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Form;
+namespace DelPlop\PbnBundle\Form;
 
-use App\Entity\Category;
+use DelPlop\PbnBundle\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -42,6 +42,7 @@ class NoteSearchFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => null,
+            'translation_domain' => 'notes'
         ]);
     }
 }

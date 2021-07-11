@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+{% trans_default_domain 'notes' %}
+
+{% block title %}{{ ('categories.sort'|trans) }}{% endblock %}
+
+{% block body %}
+    <h1 class="w3-text-cyan">{{ ('categories.sort'|trans) }}</h1>
+
+    <p>
+        <a href="{{ path('categories') }}" title="{{ ('general.back'|trans({}, 'messages')) }}">{{ ('general.back'|trans({}, 'messages')) }}</a>
+    </p>
+
+    <ul id="sort-category-list">
+        {% for category in categories %}
+            <li class="item-category-list" draggable="true" id="item-{{ category.id }}">{{ category.name }}</li>
+        {% endfor %}
+    </ul>
+
+    {% if categories|length > 15 %}
+        <p>
+            <a href="{{ path('categories') }}" title="{{ ('general.back'|trans({}, 'messages')) }}">{{ ('general.back'|trans({}, 'messages')) }}</a>
+        </p>
+    {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('bundles/pbn/js/DragDropTouch.js') }}"></script>
+    <script>
+        function slist (target) {
+            target = document.getElementById(target);
+
+            var items = target.getElementsByTagName("li"), current = null;
+            for (let i of items) {
+                i.addEventListener("dragstart", function (ev) {
+                    current = this;
+                    for (let it of items) {
+                        if (it != current) { it.classList.add("hint"); }
+                    }
+                });
+
+                i.addEventListener("dragenter", function (ev) {
+                    if (this != current) { this.classList.add("active"); }
+                });
+
+                i.addEventListener("dragleave", function () {
+                    this.classList.remove("active");
+                });
+
+                i.addEventListener("dragend", function () {
+                    for (let it of items) {
+                        it.classList.remove("hint");
+                        it.classList.remove("active");
+                    }
+                });
+
+                i.addEventListener("dragover", function (evt) {
+                    evt.preventDefault();
+                });
+
+                // ON DROP : NOUVEL ORDRE + SAUVEGARDE
+                i.addEventListener("drop", function (evt) {
+                    evt.preventDefault();
+                    let itemsOrder = [];
+
+                    if (this != current) {
+                        let currentpos = 0, droppedpos = 0;
+
+                        // réordonner les éléments
+                        for (let it = 0; it < items.length; it ++) {
+                            if (current == items[it]) { currentpos = it; }
+                            if (this == items[it]) { droppedpos = it; }
+                        }
+
+                        if (currentpos < droppedpos) {
+                            this.parentNode.insertBefore(current, this.nextSibling);
+                        } else {
+                            this.parentNode.insertBefore(current, this);
+                        }
+
+                        // nouvel ordre à sauvegarder
+                        var newItems = target.getElementsByTagName("li");
+                        for (let it = 0; it < newItems.length; it ++) {
+                            let id_parts = newItems[it].getAttribute("id").split("-");
+                            itemsOrder[it] = id_parts[1];
+                        }
+                    }
+
+                    fetch("{{ path('categories_sort_save') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(itemsOrder),
+                    });
+                });
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", function() {
+            slist("sort-category-list");
+        });
+    </script>
+{% endblock %}

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Entity;
+namespace DelPlop\PbnBundle\Entity;
 
-use App\Repository\NoteCategoryRepository;
+use DelPlop\PbnBundle\Repository\NoteCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=NoteCategoryRepository::class)
+ * @ORM\Table(name="note_category")
  */
 class NoteCategory
 {
@@ -18,13 +19,13 @@ class NoteCategory
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Note::class, inversedBy="noteCategories")
+     * @ORM\ManyToOne(targetEntity=DelPlop\PbnBundle\Entity\Note::class, inversedBy="noteCategories")
      * @ORM\JoinColumn(nullable=false)
      */
     private $note;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="noteCategories")
+     * @ORM\ManyToOne(targetEntity=DelPlop\PbnBundle\Entity\Category::class, inversedBy="noteCategories")
      * @ORM\JoinColumn(nullable=false)
      */
     private $category;

@@ -1,6 +1,0 @@
-<h4 class="w3-bar-item"><b>{{ ('categories.all'|trans) }}</b></h4>
-{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-    {% for category in categories %}
-        <a class="w3-bar-item w3-button w3-hover-black" href="{{ path('category_notes', { category: category.id }) }}">{{ category.name }}</a>
-    {% endfor %}
-{% endif %}

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repository;
+namespace DelPlop\PbnBundle\Repository;
 
-use App\Entity\Category;
-use App\Entity\Note;
-use App\Entity\NoteCategory;
+use DelPlop\PbnBundle\Entity\Category;
+use DelPlop\PbnBundle\Entity\Note;
+use DelPlop\PbnBundle\Entity\NoteCategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

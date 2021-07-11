@@ -1,0 +1,4 @@
+twig:
+    paths:
+        '%kernel.project_dir%/vendor/delplop/userbundle/src/Resources/views': DelPlopUser
+        '%kernel.project_dir%/src/Resources/views': DelPlopPbn

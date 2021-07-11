@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Entity;
+namespace DelPlop\PbnBundle\Entity;
 
-use App\Repository\NoteRepository;
+use App\Entity\ApplicationUser;
+use DelPlop\PbnBundle\Repository\NoteRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=NoteRepository::class)
+ * @ORM\Table(name="note")
  */
 class Note
 {
@@ -35,7 +37,7 @@ class Note
     private $visibility;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Category::class)
+     * @ORM\ManyToMany(targetEntity=DelPlop\PbnBundle\Entity\Category::class)
      *  @ORM\JoinTable(name="note_category",
      *         joinColumns = {@ORM\JoinColumn(name="note_id", referencedColumnName="id", onDelete="CASCADE")},
      *         inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id")}
@@ -45,12 +47,12 @@ class Note
 
 
     /**
-     * @ORM\OneToMany(targetEntity=NoteCategory::class, mappedBy="note", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=DelPlop\PbnBundle\Entity\NoteCategory::class, mappedBy="note", orphanRemoval=true)
      */
     private $noteCategories;
 
     /**
-     * @ORM\ManyToOne(targetEntity=RegisteredUser::class, inversedBy="notes")
+     * @ORM\ManyToOne(targetEntity=App\Entity\ApplicationUser::class, inversedBy="notes")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
@@ -126,12 +128,12 @@ class Note
         return $this;
     }
 
-    public function getUser(): ?RegisteredUser
+    public function getUser(): ?ApplicationUser
     {
         return $this->user;
     }
 
-    public function setUser(?RegisteredUser $user): self
+    public function setUser(?ApplicationUser $user): self
     {
         $this->user = $user;
 

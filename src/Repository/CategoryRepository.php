@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace DelPlop\PbnBundle\Repository;
 
-use App\Entity\Category;
+use DelPlop\PbnBundle\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

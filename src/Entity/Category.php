@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Entity;
+namespace DelPlop\PbnBundle\Entity;
 
-use App\Repository\CategoryRepository;
+use App\Entity\ApplicationUser;
+use DelPlop\PbnBundle\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
+ * @ORM\Table(name="category")
  */
 class Category
 {
@@ -30,12 +32,12 @@ class Category
     private $position;
 
     /**
-     * @ORM\OneToMany(targetEntity=NoteCategory::class, mappedBy="category", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=DelPlop\PbnBundle\Entity\NoteCategory::class, mappedBy="category", orphanRemoval=true)
      */
     private $noteCategories;
 
     /**
-     * @ORM\ManyToOne(targetEntity=RegisteredUser::class, inversedBy="categories")
+     * @ORM\ManyToOne(targetEntity=App\Entity\ApplicationUser::class, inversedBy="categories")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
@@ -109,12 +111,12 @@ class Category
         return $this;
     }
 
-    public function getUser(): ?RegisteredUser
+    public function getUser(): ?ApplicationUser
     {
         return $this->user;
     }
 
-    public function setUser(?RegisteredUser $user): self
+    public function setUser(?ApplicationUser $user): self
     {
         $this->user = $user;
 

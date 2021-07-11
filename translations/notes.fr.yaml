@@ -1,0 +1,47 @@
+OK: OK
+
+categories:
+    all: Catégories
+    title: Mes catégories
+    manage: Gérer les catégories
+    add: Nouvelle catégorie
+    add_category: Ajouter une catégorie
+    num: N°
+    name: Nom
+    actions: Actions
+    sort: Ordonner les catégories
+    a_cat: une catégorie
+    category: Catégorie
+    category_required: Catégorie *
+    delete_confirm: Etes-vous sûr de vouloir supprimer cette catégorie ?
+    notes: Notes
+    see_notes: Voir les notes
+    see: Voir
+
+notes:
+    new: Nouvelle
+    title_page: 'Notes %state%'
+    new_note: Nouvelle note
+    importants: Importantes
+    important_lower: importantes
+    important_notes: Notes importantes
+    public: Publiques
+    public_lower: publiques
+    public_notes: Notes publiques
+    shared: Partagées
+    shared_lower: partagées
+    shared_notes: Notes partagées
+    delete_confirm: Etes-vous sûr de vouloir supprimer cette note ?
+    a_note: une note
+    title: Titre
+    title_required: Titre *
+    desc: Description
+    visible_by: Visible par
+    visible_by_required: Visible par *
+    sort: Ordonner les notes
+    search: Recherche
+    search_placeholder: Rechercher...
+    visibility:
+        private: Moi uniquement
+        shared: Tout membre connecté
+        public: Tout le monde

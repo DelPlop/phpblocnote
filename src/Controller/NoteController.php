@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Controller;
+namespace DelPlop\PbnBundle\Controller;
 
-use App\Entity\Category;
-use App\Entity\Note;
-use App\Form\NoteFormType;
-use App\Form\NoteSearchFormType;
-use App\Repository\CategoryRepository;
-use App\Repository\NoteCategoryRepository;
+use DelPlop\PbnBundle\Entity\Category;
+use DelPlop\PbnBundle\Entity\Note;
+use DelPlop\PbnBundle\Form\NoteFormType;
+use DelPlop\PbnBundle\Form\NoteSearchFormType;
+use DelPlop\PbnBundle\Repository\CategoryRepository;
+use DelPlop\PbnBundle\Repository\NoteCategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Repository\NoteRepository;
+use DelPlop\PbnBundle\Repository\NoteRepository;
 use Twig\Environment;
 
 class NoteController extends AbstractController
@@ -53,7 +53,7 @@ class NoteController extends AbstractController
     // liste des notes d'une catégorie
     public function index(Category $category): Response
     {
-        return new Response($this->twig->render('note/index.html.twig', [
+        return new Response($this->twig->render('@DelPlopPbn/note/index.html.twig', [
             'categoryName' => $category->getName(),
             'categoryId' => $category->getId(),
             'notes' => $this->noteRepository->getNotesByCategoryAndUser($category, $this->security->getUser()),
@@ -65,10 +65,10 @@ class NoteController extends AbstractController
     // liste des notes publiques
     public function publicNotes(): Response
     {
-        return new Response($this->twig->render('note/index.html.twig', [
+        return new Response($this->twig->render('@DelPlopPbn/note/index.html.twig', [
             'notes' => $this->noteRepository->findBy(['visibility' => 'public']),
             'activePage' => 'notes-pub',
-            'categoryName' => $this->translator->trans('notes.title_page', ['%state%' => $this->translator->trans('notes.public_lower')]),
+            'categoryName' => $this->translator->trans('notes.title_page', ['%state%' => $this->translator->trans('notes.public_lower', [], 'notes')], 'notes'),
             'type' => 'public'
         ]));
     }
@@ -76,10 +76,10 @@ class NoteController extends AbstractController
     // liste des notes partagées
     public function sharedNotes(): Response
     {
-        return new Response($this->twig->render('note/index.html.twig', [
+        return new Response($this->twig->render('@DelPlopPbn/note/index.html.twig', [
             'notes' => $this->noteRepository->findBy(['visibility' => ['public', 'shared']]),
             'activePage' => 'notes-shared',
-            'categoryName' => $this->translator->trans('notes.title_page', ['%state%' => $this->translator->trans('notes.shared_lower')]),
+            'categoryName' => $this->translator->trans('notes.title_page', ['%state%' => $this->translator->trans('notes.shared_lower', [], 'notes')], 'notes'),
             'type' => 'public'
         ]));
     }
@@ -95,7 +95,7 @@ class NoteController extends AbstractController
             ]
         ]);
 
-        return new Response($this->twig->render('note/search-form.html.twig', [
+        return new Response($this->twig->render('@DelPlopPbn/note/search-form.html.twig', [
             'form' => $form->createView()
         ]));
     }
@@ -119,10 +119,10 @@ class NoteController extends AbstractController
 
             $notes = $this->noteRepository->searchNotes($this->security->getUser(), $data['search']);
         }
-        return new Response($this->twig->render('note/index.html.twig', [
+        return new Response($this->twig->render('@DelPlopPbn/note/index.html.twig', [
             'notes' => $notes,
             'activePage' => 'home',
-            'categoryName' => $this->translator->trans('notes.search'),
+            'categoryName' => $this->translator->trans('notes.search', [], 'notes'),
             'type' => 'search'
         ]));
     }
@@ -131,12 +131,12 @@ class NoteController extends AbstractController
     public function edit(Request $request, ?Note $note, ?Category $category): Response
     {
         $categoryId = 0;
-        $label = $this->translator->trans('form.edit');
+        $label = $this->translator->trans('form.edit', [], 'messages');
         $type = 'edit';
         $page = 'home';
 
         if (empty($note)) {
-            $label = $this->translator->trans('form.add');
+            $label = $this->translator->trans('form.add', [], 'messages');
             $type = 'add';
             $page = 'notes-new';
 
@@ -183,7 +183,7 @@ class NoteController extends AbstractController
             return $this->redirectToRoute('category_notes', ['category' => $categoryId]);
         }
 
-        return new Response($this->twig->render('note/edit.html.twig', [
+        return new Response($this->twig->render('@DelPlopPbn/note/edit.html.twig', [
             'form' => $form->createView(),
             'activePage' => $page,
             'type' => $type
@@ -193,7 +193,7 @@ class NoteController extends AbstractController
     // ordonner les notes
     public function sort(Category $category)
     {
-        return new Response($this->twig->render('note/sort.html.twig', [
+        return new Response($this->twig->render('@DelPlopPbn/note/sort.html.twig', [
             'notes' => $this->noteRepository->getNotesByCategoryAndUser($category, $this->security->getUser()),
             'activePage' => 'home',
             'category' => $category

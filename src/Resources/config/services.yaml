@@ -1,0 +1,37 @@
+imports:
+    - { resource: '../../../../dbbundle/src/Resources/config/services.yaml' }
+    - { resource: '../../../../userbundle/src/Resources/config/services.yaml' }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    DelPlop\UserBundle\Controller\:
+        resource: '../../../../userbundle/src/Controller/'
+        tags: ['controller.service_arguments']
+    DelPlop\PbnBundle\Controller\:
+        resource: '../../Controller/'
+        tags: [ 'controller.service_arguments' ]
+
+    DelPlop\UserBundle\Repository\UserRepository:
+        tags: [ 'doctrine.repository_service' ]
+    DelPlop\PbnBundle\Repository\:
+        resource: '../../Repository/'
+        tags: [ 'doctrine.repository_service' ]
+
+    symfony.security:
+        alias: Symfony\Component\Security\Core\Security
+
+    delplop.pbn.form.type.note:
+        class: DelPlop\PbnBundle\Form\NoteFormType
+        arguments: ['@symfony.security']
+        tags:
+            - { name: form.type }
+
+    project.subscriber.table_prefix:
+        class: DelPlop\DbBundle\Subscriber\TablePrefixSubscriber
+        arguments:
+            $prefix: 'sf5_'
+        tags:
+            - { name: doctrine.event_subscriber }
