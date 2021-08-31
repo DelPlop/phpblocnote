@@ -12,9 +12,11 @@
             "role": "Developer"
         }
     ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "require": {
         "php": ">=8.0",
-        "delplop/dbbundle": "dev-master",
+        "delplop/dbbundle": "1.*",
         "delplop/userbundle": "dev-master"
     },
     "repositories": {
