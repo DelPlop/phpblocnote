@@ -15,9 +15,9 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.0",
-        "delplop/dbbundle": "1.*",
-        "delplop/userbundle": "dev-master"
+        "php": ">=8.1",
+        "delplop/dbbundle": "dev-master",
+        "delplop/userbundle": "6.1"
     },
     "repositories": {
         "db-bundle": {
