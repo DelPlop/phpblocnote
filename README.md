@@ -5,7 +5,16 @@ phpBlocNote millésime 2021 est un bundle pour Symfony 5 (testé sur PHP 8.0)
 
 ## installation et utilisation
 ### composer
-`composer require delplop/pbnbundle dev-master`
+Ajouter (ou modifier)
+```
+    "repositories": {
+        "pbn-bundle": {
+            "type": "vcs",
+            "url": "git@github.com:DelPlop/phpblocnote.git"
+        }
+    },
+```
+dans `composer.json` de votre projet puis exécuter `composer require delplop/pbnbundle dev-master`
 
 ### templates twig
 #### templates
