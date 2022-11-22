@@ -4,26 +4,25 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4753832176fe871a2cbbefbc3e4c0687",
+    "content-hash": "ba246501d28577fdc18fe223a7c12661",
     "packages": [
         {
             "name": "delplop/dbbundle",
-            "version": "dev-master",
+            "version": "1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DelPlop/sf-db-prefix-bundle.git",
-                "reference": "0ce42000116ed1d3b2c133016390c2a6efcdedc0"
+                "reference": "41c8e1adbc0942b18f093b1587db25ffed7c8dcf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DelPlop/sf-db-prefix-bundle/zipball/0ce42000116ed1d3b2c133016390c2a6efcdedc0",
-                "reference": "0ce42000116ed1d3b2c133016390c2a6efcdedc0",
+                "url": "https://api.github.com/repos/DelPlop/sf-db-prefix-bundle/zipball/41c8e1adbc0942b18f093b1587db25ffed7c8dcf",
+                "reference": "41c8e1adbc0942b18f093b1587db25ffed7c8dcf",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.1"
+                "php": ">=8.0"
             },
-            "default-branch": true,
             "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
@@ -42,10 +41,10 @@
             ],
             "description": "Symfony database bundle to configure table prefix",
             "support": {
-                "source": "https://github.com/DelPlop/sf-db-prefix-bundle/tree/master",
+                "source": "https://github.com/DelPlop/sf-db-prefix-bundle/tree/1.0",
                 "issues": "https://github.com/DelPlop/sf-db-prefix-bundle/issues"
             },
-            "time": "2022-11-22T10:19:12+00:00"
+            "time": "2021-07-13T18:52:21+00:00"
         },
         {
             "name": "delplop/userbundle",
@@ -5456,9 +5455,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "delplop/dbbundle": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
