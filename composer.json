@@ -22,11 +22,11 @@
     "repositories": {
         "db-bundle": {
             "type": "vcs",
-            "url": "https://github.com/DelPlop/sf-db-prefix-bundle.git"
+            "url": "git@github.com:DelPlop/sf-db-prefix-bundle.git"
         },
         "user-bundle": {
             "type": "vcs",
-            "url": "https://github.com/DelPlop/sf-user-bundle.git"
+            "url": "git@github.com:DelPlop/sf-user-bundle.git"
         }
     },
     "autoload": {

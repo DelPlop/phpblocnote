@@ -1,7 +1,7 @@
 # phpBlocNote Bundle
 
 ## pré-requis
-phpBlocNote millésime 2021 est un bundle pour Symfony 5 (testé sur PHP 8.0)
+phpBlocNote millésime 2022 est un bundle pour Symfony 6.1 (testé sur PHP 8.1)
 
 ## installation et utilisation
 ### composer
@@ -32,7 +32,7 @@ copier le fichier `src/Entity/ApplicationUser.php.dist` du bundle dans le projet
 
 ### configuration
 #### fichiers yaml
-vous aurez à configurer plusieurs fichiers du projet principal. Vous pouvez prendre exemple sur https://github.com/DelPlop/phpblocnote-demo
+vous aurez à configurer plusieurs fichiers du projet principal.
 
 #### préfixes des tables
 par défaut, les tables sont préfixées par `sfp_` mais vous pouvez retirer le préfixe ou le modifier à votre guise :) (voir `config/services.yaml` ligne 29)
