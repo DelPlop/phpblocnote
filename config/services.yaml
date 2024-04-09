@@ -27,4 +27,5 @@ services:
         class: DelPlop\DbBundle\Subscriber\TablePrefixSubscriber
         arguments:
             $prefix: 'sfp_'
-        tags: [ 'doctrine.event_subscriber' ]
+        tags:
+            - { name: doctrine.event_suscriber }
